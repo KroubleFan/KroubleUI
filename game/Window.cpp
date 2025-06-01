@@ -4,7 +4,7 @@ namespace KroubleUI {
 
 	Window::Window(HINSTANCE hInstance, const std::wstring& title, int width, int height) : m_hwnd(nullptr), m_d2dFactory(nullptr), m_dwriteFactory(nullptr), m_renderTarget(nullptr) {
 
-		// ×¢²á´°¿ÚÀà
+		// æ³¨å†Œçª—å£ç±»
 		WNDCLASSEXW wcex = { sizeof(WNDCLASSEX) };
 		wcex.style = CS_HREDRAW | CS_VREDRAW;
 		wcex.lpfnWndProc = WindowProc;
@@ -19,7 +19,7 @@ namespace KroubleUI {
 			throw std::runtime_error("Failed to register window class");
 		}
 
-		// ´´½¨´°¿Ú
+		// åˆ›å»ºçª—å£
 		m_hwnd = CreateWindowW(
 			L"KroubleUIWindow",
 			title.c_str(),
@@ -36,7 +36,7 @@ namespace KroubleUI {
 			throw std::runtime_error("Failed to create window");
 		}
 
-		// ³õÊ¼»¯Direct2DºÍDirectWrite
+		// åˆå§‹åŒ–Direct2Då’ŒDirectWrite
 		InitializeDirect2D();
 
 		ShowWindow(m_hwnd, SW_SHOW);
@@ -44,7 +44,7 @@ namespace KroubleUI {
 	}
 
 	void Window::InitializeDirect2D() {
-		// ´´½¨D2D¹¤³§
+		// åˆ›å»ºD2Då·¥åŽ‚
 		D2D1_FACTORY_OPTIONS options;
 		ZeroMemory(&options, sizeof(D2D1_FACTORY_OPTIONS));
 
@@ -59,7 +59,7 @@ namespace KroubleUI {
 			throw std::runtime_error("Failed to create D2D factory");
 		}
 
-		// ´´½¨DirectWrite¹¤³§
+		// åˆ›å»ºDirectWriteå·¥åŽ‚
 		hr = DWriteCreateFactory(
 			DWRITE_FACTORY_TYPE_SHARED,
 			__uuidof(IDWriteFactory),
@@ -70,7 +70,7 @@ namespace KroubleUI {
 			throw std::runtime_error("Failed to create DirectWrite factory");
 		}
 
-		// ´´½¨äÖÈ¾Ä¿±ê
+		// åˆ›å»ºæ¸²æŸ“ç›®æ ‡
 		RECT rc;
 		GetClientRect(m_hwnd, &rc);
 
@@ -155,7 +155,7 @@ namespace KroubleUI {
 				pThis->OnKeyboardEvent(message, wParam, lParam);
 				return 0;
 			case WM_IME_SETCONTEXT:
-				// È·±£ÏÔÊ¾ÊäÈë·¨´°¿Ú
+				// ç¡®ä¿æ˜¾ç¤ºè¾“å…¥æ³•çª—å£
 				if (wParam == TRUE) {
 					lParam |= ISC_SHOWUICOMPOSITIONWINDOW;
 				}
@@ -179,7 +179,7 @@ namespace KroubleUI {
 		POINT pt = { GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam) };
 		bool eventHandled = false;
 
-		// ÄæÐò±éÀú¿Ø¼þ£¨´Ó×îÉÏ²ãµ½×îÏÂ²ã£©
+		// é€†åºéåŽ†æŽ§ä»¶ï¼ˆä»Žæœ€ä¸Šå±‚åˆ°æœ€ä¸‹å±‚ï¼‰
 		for (auto it = m_controls.rbegin(); it != m_controls.rend(); ++it) {
 			auto& control = *it;
 
@@ -190,12 +190,12 @@ namespace KroubleUI {
 			switch (message) {
 			case WM_MOUSEMOVE:
 				if (!eventHandled) {
-					// Ö»ÈÃ×îÉÏ²ã·ûºÏÌõ¼þµÄ¿Ø¼þ´¦ÀíÐüÍ£×´Ì¬
+					// åªè®©æœ€ä¸Šå±‚ç¬¦åˆæ¡ä»¶çš„æŽ§ä»¶å¤„ç†æ‚¬åœçŠ¶æ€
 					control->OnMouseEvent(isInside ? WM_MOUSEMOVE : WM_MOUSELEAVE, wParam, lParam);
 					if (isInside) eventHandled = true;
 				}
 				else {
-					// ÆäËû¿Ø¼þÇ¿ÖÆÉèÎª·ÇÐüÍ£×´Ì¬
+					// å…¶ä»–æŽ§ä»¶å¼ºåˆ¶è®¾ä¸ºéžæ‚¬åœçŠ¶æ€
 					control->OnMouseEvent(WM_MOUSELEAVE, wParam, lParam);
 				}
 				break;
@@ -209,7 +209,7 @@ namespace KroubleUI {
 				break;
 
 			case WM_MOUSELEAVE:
-				// Í¨ÖªËùÓÐ¿Ø¼þÊó±êÀë¿ª
+				// é€šçŸ¥æ‰€æœ‰æŽ§ä»¶é¼ æ ‡ç¦»å¼€
 				control->OnMouseEvent(WM_MOUSELEAVE, wParam, lParam);
 				break;
 			}
