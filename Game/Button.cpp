@@ -23,12 +23,12 @@ namespace KroubleUI {
     void Button::Initialize(ID2D1RenderTarget* renderTarget, IDWriteFactory* dwriteFactory) {
         SafeReleaseResources();
 
-        // 创建默认画笔
+        // 鍒涘缓榛樿鐢荤瑪
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::Black), &m_textBrush);
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::LightGray), &m_backgroundBrush);
         renderTarget->CreateSolidColorBrush(D2D1::ColorF(D2D1::ColorF::DarkGray), &m_borderBrush);
 
-        // 创建文本格式
+        // 鍒涘缓鏂囨湰鏍煎紡
         dwriteFactory->CreateTextFormat(
             L"Microsoft YaHei",
             nullptr,
@@ -61,7 +61,7 @@ namespace KroubleUI {
     void Button::Draw(ID2D1RenderTarget* renderTarget) {
         if (!m_visible) return;
 
-        // 初始化资源（如果尚未初始化）
+        // 鍒濆鍖栬祫婧愶紙濡傛灉灏氭湭鍒濆鍖栵級
         if (!m_textBrush && renderTarget && m_parent) {
             IDWriteFactory* dwriteFactory = m_parent->GetDWriteFactory();
             if (dwriteFactory) {
@@ -69,7 +69,7 @@ namespace KroubleUI {
             }
         }
 
-        // 确定背景和边框颜色（根据状态）
+        // 纭畾鑳屾櫙鍜岃竟妗嗛鑹诧紙鏍规嵁鐘舵�侊級
         D2D1_COLOR_F bgColor = m_backgroundBrush ? m_backgroundBrush->GetColor() : D2D1::ColorF(D2D1::ColorF::LightGray);
         D2D1_COLOR_F borderColor = m_borderBrush ? m_borderBrush->GetColor() : D2D1::ColorF(D2D1::ColorF::DarkGray);
 
@@ -84,19 +84,19 @@ namespace KroubleUI {
             bgColor.b *= 1.1f;
         }
 
-        // 绘制背景
+        // 缁樺埗鑳屾櫙
         ID2D1SolidColorBrush* tempBgBrush = nullptr;
         renderTarget->CreateSolidColorBrush(bgColor, &tempBgBrush);
         renderTarget->FillRectangle(m_rect, tempBgBrush);
         tempBgBrush->Release();
 
-        // 绘制边框
+        // 缁樺埗杈规
         ID2D1SolidColorBrush* tempBorderBrush = nullptr;
         renderTarget->CreateSolidColorBrush(borderColor, &tempBorderBrush);
         renderTarget->DrawRectangle(m_rect, tempBorderBrush, 1.0f);
         tempBorderBrush->Release();
 
-        // 绘制文本
+        // 缁樺埗鏂囨湰
         if (m_textBrush && m_textFormat && !m_text.empty()) {
             renderTarget->DrawTextW(
                 m_text.c_str(),
